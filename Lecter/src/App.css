@@ -1,0 +1,58 @@
+.msg_left{
+    margin-bottom: 1%;  
+}
+.msg-id{
+    width:fit-content ;
+    margin-bottom: 10px;  
+}
+.msg-id_right{
+    margin-left: 79%;
+}
+.msg-id>img{
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+}
+.msg-id>b{
+    background-color:rgb(192, 210, 236);
+    border-radius: 5px;
+    padding: 6px;
+    margin-bottom: 5%;
+}
+.msg_right{
+margin-left: 55%;
+margin-right: 2.5%;
+}
+
+.page{
+    background-color: aliceblue;
+    padding: 1%;
+    border-radius: 10px;
+}
+.input{
+    margin-left: 1%;
+    margin-right: 1%;
+    height:35px;
+    display: flex;
+}
+.chatLog{
+    margin-top: 1%;
+    margin-bottom: 1%;
+    height: 30em;
+    overflow-y: scroll;
+    border-radius: 10px;
+}
+.msg {
+   margin-top: 1%;
+  }
+.msg-bubble {
+    background-color:rgb(221, 192, 236);
+    max-width: 400px;
+    height: auto;
+    border-radius: 10px;
+    padding: 8px;
+}
+.inputArea{
+    flex: 1;
+    font-size: large;
+}

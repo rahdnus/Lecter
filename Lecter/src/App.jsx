@@ -1,20 +1,26 @@
 import './App.css'
-import { useState,useEffect } from 'react';
+import { useState,useEffect} from 'react';
+import ChatLog from './Components/ChatLog';
 
 function App() {
   let responseText=""
-  const [aiChatText,setAIChatText]=useState("")
-  const [userChatDisabled,setUserChatDisabled]=useState(false)
-  
-  const API="https://volkswagen-portuguese-kept-promote.trycloudflare.com"
-  const trimStrings=["You:","you:","User:"]
   let promptString="Dr. Evelyn Carter is a compassionate and experienced therapist specializing in depression and anxiety. With a warm smile and calm demeanor, she creates a safe space for her patients to open up. Dr. Carter's empathetic nature and exceptional emotional intelligence allow her to connect deeply with individuals, addressing their concerns with sensitivity. She tailors treatment plans using evidence-based approaches, empowering patients with practical coping skills. Known for her transformative impact, Dr. Carter is a lifeline during dark moments, instilling hope and guiding individuals towards personal growth. Outside of work, she values self-care, enjoys yoga, nature, and advocates for mental health destigmatization in her community.\n\nThen the roleplay chat between You and Dr. Evelyn Carter begins.\nDr. Evelyn Carter:";
-  const firstmessage="Hello there";
+  const firstmessage="Hello there.";
+  const API="https://beverage-strikes-fix-portugal.trycloudflare.com"
+  const trimStrings=["You:","you:","User:"]
+
+  const [userChatDisabled,setUserChatDisabled]=useState(false)
+  const [messages,setMessages]=useState([])
+  const [inputText,setInputText]=useState(firstmessage)
+  // let inputText;
+  const [initial,setInitial]=useState(true)
+  const [initial2,setInitial2]=useState(true)
+
   function handleSubmit(event) {
     event.preventDefault()
-    // setAIChatText(""); 
-    generateResponse("You:"+event.currentTarget.elements.UserInput.value+".\nDr.Evelyn Carter:")
+    setInputText(event.currentTarget.elements.UserInput.value)
   }
+  
   function handleResponse(response){
       console.log(response)
       let trimindex=Infinity;
@@ -27,19 +33,22 @@ function App() {
         {
           response=response.slice(0,trimindex)      
           promptString+=response
+          responseText+=response;
           setUserChatDisabled(false);
-          setAIChatText(responseText+response);
+          setMessages([...messages,{id:0,text:responseText}])
           responseText=""
         }
       else
         {
           responseText+=response
-          setAIChatText(responseText)
+          // setAIChatText(responseText)
           generateResponse(response)
         }
         console.log(promptString);
   }
+
   function generateResponse(input){
+    console.log(messages)
     promptString+=input
     const data={
         "prompt": promptString,
@@ -59,9 +68,10 @@ function App() {
         "top_p": 0.96,
         "typical": 1,
         "sampler_order": [ 6, 0, 1, 2, 3, 4, 5 ]
-    }
+      }
     setUserChatDisabled(true);
-    fetch(`${API}/api/v1/generate`,{
+    fetch(`${API}/api/v1/generate` ,
+    {
       method: 'POST',
       headers:{
         'accept': 'application/json' ,
@@ -73,26 +83,58 @@ function App() {
     .catch(error => console.error(error));
   }
 
-  useEffect(() => {
-    generateResponse(firstmessage)
-  },[]);
+  // useEffect(() => {
+  //   setMessages([{id:0,text:firstmessage}])
+  // },[]);
+  useEffect(()=>{
+    if(initial2)
+    {
+      setInitial2(false)
+      setMessages([{id:0,text:inputText},
+                   {id:1,text:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore, itaque amet eos eum error magnam dicta ut quam reprehenderit sint laudantium vero accusantium, eius, officiis aliquam nostrum assumenda. Harum, alias."},
+                   {id:0,text:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore, itaque amet eos eum error magnam dicta ut quam reprehenderit sint laudantium vero accusantium, eius, officiis aliquam nostrum assumenda. Harum, alias."}
+                   ,{id:0,text:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore, itaque amet eos eum error magnam dicta ut quam reprehenderit sint laudantium vero accusantium, eius, officiis aliquam nostrum assumenda. Harum, alias."}
+                   ,{id:0,text:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore, itaque amet eos eum error magnam dicta ut quam reprehenderit sint laudantium vero accusantium, eius, officiis aliquam nostrum assumenda. Harum, alias."}
+                   ,{id:0,text:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore, itaque amet eos eum error magnam dicta ut quam reprehenderit sint laudantium vero accusantium, eius, officiis aliquam nostrum assumenda. Harum, alias."}
+                   ,{id:0,text:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore, itaque amet eos eum error magnam dicta ut quam reprehenderit sint laudantium vero accusantium, eius, officiis aliquam nostrum assumenda. Harum, alias."}
+                   ,{id:0,text:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore, itaque amet eos eum error magnam dicta ut quam reprehenderit sint laudantium vero accusantium, eius, officiis aliquam nostrum assumenda. Harum, alias."}
+                 
+                  ])
+      
+    }
+   
+    else
+      setMessages([...messages,{id:1,text:inputText}])
+  },[inputText])
 
   useEffect(()=>{
-   console.log(aiChatText);
-  },[aiChatText])
+    if(messages.length!=0 && messages[messages.length-1].id===1)
+    if(initial)
+    {
+      console.log(inputText)
+      setInitial(false)
+      generateResponse(firstmessage+"You:"+inputText+".\nDr.Evelyn Carter:")
+    }
+    else
+    {
+      generateResponse("You:"+inputText+".\nDr.Evelyn Carter:")
+    }
+  },[messages])
+  // useEffect(()=>{
+  // //  console.log(aiChatText);
+  // },[aiChatText])
 
   return (
     <>
+        <div className='page'>
+          <ChatLog messages={messages}/>
+          <form onSubmit={handleSubmit}>
+            <div className='input'> 
+             <input id="UserInput" type="text" className="inputArea" disabled={userChatDisabled}/>
+            </div>
+          </form>
+        </div>
 
-        <form onSubmit={handleSubmit}>
-        <div>
-           <label htmlFor="UserInput">User:</label>
-           <input id="UserInput" type="text" disabled={userChatDisabled}/>
-        </div>
-        </form>
-        <div>
-          <p>{aiChatText}</p>
-        </div>
     </>
   )
 }
