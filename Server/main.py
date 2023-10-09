@@ -60,15 +60,25 @@ def storeMentalHealth():
     print(input_text)
     processed_data = prepare_data(input_text, tokenizer)
     result = make_prediction(sentiment_model, processed_data=processed_data)
+    mailID=request.json['mailid']
+    filter = { 'mail': f'{mailID}' }
+    # Values to be updated.
+    newvalues = { "$inc": { f'{result}': 1 } }
+    print(filter)
+    print(newvalues)
+    health.update_one(filter, newvalues)
     
     return jsonify({"text":"Successfully Stored"})
 
 @app.route('/eval',methods = ['POST'])
 def evaluateMentalHealth():
-    input_text=request.json['input']
-
+    mailID=request.json['mailid']
     #get stats from db
+    healthResult=health.find_one({'mail':f'{mailID}'})
     #find max
+    print(healthResult)
+    result = max(zip(healthResult.values(), healthResult.keys()))[1]
+    print(result)
     #return result
     return jsonify({"result":result})
 
@@ -80,7 +90,7 @@ def signIn():
     if loginCol.count_documents(res)==0:
       return jsonify({"result":"Check Mail or Password"})
     else :
-      return jsonify({"result":"Success Login"})
+      return jsonify({"result":1})
 
 @app.route('/signUp',methods = ['POST'])
 def signUp():
@@ -91,7 +101,7 @@ def signUp():
       return jsonify({"result":"Mail already exists"})
     else :
       loginCol.insert_one({'mail':mailID,'password':password})
-      return jsonify({"result":"Success SignUp"})
+      return jsonify({"result":1})
 
 # Running app
 if __name__ == '__main__':
