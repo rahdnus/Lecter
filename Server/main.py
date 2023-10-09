@@ -101,6 +101,7 @@ def signUp():
       return jsonify({"result":"Mail already exists"})
     else :
       loginCol.insert_one({'mail':mailID,'password':password})
+      healthCol.insert_one({'mail':mailID,'Anxiety':0,'Depressed':0,'Bipolar':0,'ADHD':0,'Autism':0})
       return jsonify({"result":1})
 
 # Running app
