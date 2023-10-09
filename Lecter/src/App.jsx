@@ -3,22 +3,85 @@ import { useState,useEffect} from 'react';
 import ChatLog from './Components/ChatLog';
 
 function App() {
+
+
+  const serverAPI= "http://92b0-34-30-104-64.ngrok-free.app"
+  const llmAPI=""
+
+  
   let responseText=""
   let promptString="Dr. Evelyn Carter is a compassionate and experienced therapist specializing in depression and anxiety. With a warm smile and calm demeanor, she creates a safe space for her patients to open up. Dr. Carter's empathetic nature and exceptional emotional intelligence allow her to connect deeply with individuals, addressing their concerns with sensitivity. She tailors treatment plans using evidence-based approaches, empowering patients with practical coping skills. Known for her transformative impact, Dr. Carter is a lifeline during dark moments, instilling hope and guiding individuals towards personal growth. Outside of work, she values self-care, enjoys yoga, nature, and advocates for mental health destigmatization in her community.\n\nThen the roleplay chat between You and Dr. Evelyn Carter begins.\nDr. Evelyn Carter:";
   const firstmessage="Hello there.";
   const API="https://beverage-strikes-fix-portugal.trycloudflare.com"
   const trimStrings=["You:","you:","User:"]
 
+  const evalThreshold=30;
+  const [msgCounter,setmsgCounter]=useState(0)
   const [userChatDisabled,setUserChatDisabled]=useState(false)
   const [messages,setMessages]=useState([])
   const [inputText,setInputText]=useState(firstmessage)
   // let inputText;
   const [initial,setInitial]=useState(true)
   const [initial2,setInitial2]=useState(true)
+  function handleSignUp(event) {
+    event.preventDefault()
 
+    let data={mail:event.currentTarget.elements.mail.value,
+      password:event.currentTarget.elements.pass.value,
+    }
+    fetch(`${serverAPI}/signUp`,{
+      method: 'POST',
+      headers:{
+        'Content-Type': 'application/json',
+        'ngrok-skip-browser-warning': '69420'},
+        body:JSON.stringify(data),
+    }).then(response => response.json()).then(jsondata => console.log(jsondata))
+  }
+
+  function handleSignIn(event) {
+    event.preventDefault()
+
+    let data={mail:event.currentTarget.elements.mail.value,
+      password:event.currentTarget.elements.pass.value,
+    }
+    fetch(`${serverAPI}/signIn`,{
+      method: 'POST',
+      headers:{
+        'Content-Type': 'application/json',
+        'ngrok-skip-browser-warning': '69420'},
+        body:JSON.stringify(data),
+    }).then(response => response.json()).then(jsondata => console.log(jsondata))
+  }
   function handleSubmit(event) {
     event.preventDefault()
-    setInputText(event.currentTarget.elements.UserInput.value)
+    //evaluate and store data
+
+    fetch(`${serverAPI}/store`,{
+      method: 'POST',
+      headers:{
+        'Content-Type': 'application/json',
+        'ngrok-skip-browser-warning': '69420'},
+        body:JSON.stringify({input:event.currentTarget.elements.UserInput.value}),
+    }).then(response => response.json()).then(jsondata => console.log(jsondata))
+    
+    
+    if(msgCounter+1==evalThreshold)
+    {
+      let responseState=""
+      fetch(`${serverAPI}/eval`,{
+        method:'GET',
+        headers:{
+          'Content-Type':'application/json',
+          "ngrok-skip-browser-warning": "69420"
+       
+        }
+      }).then(response => response.json()).then(jsondata => responseState=jsondata.result)
+
+
+    }
+    setmsgCounter((msgCounter+1)%evalThreshold);
+    // setInputText(event.currentTarget.elements.UserInput.value)
+
   }
   
   function handleResponse(response){
@@ -126,11 +189,23 @@ function App() {
 
   return (
     <>
+        <form onSubmit={handleSignUp}>
+          <input id="mail" placeholder='mail ID' type="text" className="inputArea"/>
+          <input id="pass" placeholder='password' type="text" className="inputArea"/>
+          <input type="submit" value="Submit"></input>
+
+        </form>
+        <form onSubmit={handleSignIn}>
+          <input id="mail" placeholder='mail ID' type="text" className="inputArea"/>
+          <input id="pass" placeholder='password' type="text" className="inputArea"/>
+          <input type="submit" value="Submit"></input>
+
+        </form>
         <div className='page'>
           <ChatLog messages={messages}/>
           <form onSubmit={handleSubmit}>
             <div className='input'> 
-             <input id="UserInput" type="text" className="inputArea" disabled={userChatDisabled}/>
+             <input id="UserInput" placeholder='  Enter Message' type="text" className="inputArea" disabled={userChatDisabled}/>
             </div>
           </form>
         </div>

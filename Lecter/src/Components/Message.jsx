@@ -8,7 +8,7 @@ function Message({id,text})
                 id==1? 
                     <div className="msg-id msg-id_right">
                         <b>You</b>
-                        <img src="user.png"/>
+                        <img src="user.jpg"/>
                     </div>
                     :
                     <div className="msg-id">

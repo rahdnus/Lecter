@@ -3,7 +3,6 @@
 }
 .msg-id{
     width:fit-content ;
-    margin-bottom: 10px;  
 }
 .msg-id_right{
     margin-left: 79%;
@@ -12,12 +11,14 @@
     width: 40px;
     height: 40px;
     border-radius: 20px;
+    /* margin-top: 10px; */
 }
 .msg-id>b{
-    background-color:rgb(192, 210, 236);
+    background-color: rgb(192, 210, 236);
     border-radius: 5px;
     padding: 6px;
-    margin-bottom: 5%;
+    position: relative;
+    bottom: 10px;
 }
 .msg_right{
 margin-left: 55%;
@@ -54,5 +55,5 @@ margin-right: 2.5%;
 }
 .inputArea{
     flex: 1;
-    font-size: large;
+    font-size: medium;
 }
