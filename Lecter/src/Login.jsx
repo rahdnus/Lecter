@@ -1,17 +1,24 @@
+import { useRef } from "react";
 import { useGlobalContext } from "./context";
 import { useNavigate } from "react-router-dom";
+
 
 function Login() {
 
     const {serverAPI,setMailID} = useGlobalContext()
     const navigate = useNavigate();
+    const mailRef=useRef()
+    const passRef=useRef()
 
-    function handleSignUp(event) {
-        event.preventDefault()
+    function handleSignUp() {
+        // event.preventDefault()
         
-        const mailval=event.currentTarget.elements.mail.value
-        const passval=event.currentTarget.elements.pass.value
-
+        // const mailval=event.currentTarget.elements.mail.value
+        // const passval=event.currentTarget.elements.pass.value
+        const mailval=mailRef.current.value;
+        const passval=passRef.current.value;
+        console.log(mailRef.current.value)
+        console.log(passRef.current.value)
         let data={
           mail:mailval,
           password:passval,
@@ -35,14 +42,19 @@ function Login() {
             }
 
         })
-
-
       }
     
-      function handleSignIn(event) {
-        event.preventDefault()
-        const mailval=event.currentTarget.elements.mail.value
-        const passval=event.currentTarget.elements.pass.value
+      
+      function handleSignIn() {
+        // event.preventDefault()
+        // const mailval=event.currentTarget.elements.mail.value
+        // const passval=event.currentTarget.elements.pass.value
+        console.log(mailRef.current.value)
+        console.log(passRef.current.value)
+
+        const mailval=mailRef.current.value;
+        const passval=passRef.current.value;
+
         let data={
           mail:mailval,
           password:passval,
@@ -66,20 +78,41 @@ function Login() {
     
             })
       }
+
     return (
         <>
-         <form onSubmit={handleSignUp}>
-          <input id="mail" placeholder='mail ID' type="text" className="inputArea"/>
-          <input id="pass" placeholder='password' type="text" className="inputArea"/>
-          <input type="submit" value="Submit"></input>
+        <div className="accessBox">
 
-        </form>
-        <form onSubmit={handleSignIn}>
-          <input id="mail" placeholder='mail ID' type="text" className="inputArea"/>
-          <input id="pass" placeholder='password' type="text" className="inputArea"/>
-          <input type="submit" value="Submit"></input>
+        <form onSubmit={(event)=>{event.preventDefault()}} className="formBox">
+          <div>
+          <p className="accessInputLabel">Email</p>
+          <input ref={mailRef} id="mail" placeholder='Enter Email' 
+          type="text" className="accessInputArea"/>
+          </div>
 
+          <div> 
+          <p className="accessInputLabel">Password</p>
+          <input ref={passRef} id="pass" placeholder='Enter Password' 
+          type="text" className="accessInputArea"/>
+          </div>
+
+          {/* <input type="submit" value="SignIn" className="accessButton"></input> */}
         </form>
+        <div className="buttonBox">
+        <button className="accessButton" onClick={handleSignIn}>Login</button>
+        <button className="accessButton" onClick={handleSignUp}>Sign up</button>
+        </div>
+
+
+        {/* <form onSubmit={handleSignIn} className="formBox">
+          <input id="mail" placeholder='mail ID' 
+          type="text" className="inputArea"/>
+          <input id="pass" placeholder='password' 
+          type="text" className="inputArea"/>
+          <input type="submit" value="LogIn" className="accessButton"></input>
+        </form> */}
+
+        </div>
         </>
         );
 }

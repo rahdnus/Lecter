@@ -1,3 +1,5 @@
+
+
 import Message from "./Message"
 /* eslint-disable react/prop-types */
 function ChatLog({messages})
@@ -7,7 +9,8 @@ function ChatLog({messages})
         <div className="chatLog">
             {
                 messages?.map((message,i) => {
-                return <Message key ={i} id={message.id} text={message.text} />
+                return <Message key ={i} id={message.id} 
+                text={message.text} />
                 })
             }
         </div>
