@@ -9,8 +9,8 @@ const AppProvider = ({ children }) => {
   
   const [mailID, setMailID] = useState("");
 
-  const koboldAPI="https://bingo-bound-seeks-preserve.trycloudflare.com"
-  const serverAPI= "http://1c3e-34-30-104-64.ngrok-free.app"
+  const koboldAPI="https://luxury-expense-medal-regular.trycloudflare.com"
+  const serverAPI= "http://df0e-34-122-82-75.ngrok-free.app/"
   return <AppContext.Provider value={{ serverAPI,koboldAPI,mailID, setMailID }}>
     {children}</AppContext.Provider>
 }
