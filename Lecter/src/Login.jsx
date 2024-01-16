@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 function Login() {
 
-    const {serverAPI,setMailID} = useGlobalContext()
+    const {serverAPI,setFirstMessage,setMailID} = useGlobalContext()
     const navigate = useNavigate();
     const mailRef=useRef()
     const passRef=useRef()
@@ -20,7 +20,7 @@ function Login() {
         console.log(mailRef.current.value)
         console.log(passRef.current.value)
         let data={
-          mail:mailval,
+          mailid:mailval,
           password:passval,
         }
 
@@ -33,6 +33,7 @@ function Login() {
         }).then(response => response.json()).then(jsondata => {
             if(jsondata.result===1){
                 setMailID(mailval);
+                setFirstMessage(jsondata.message);
                 navigate("/chat");
 
             }
@@ -56,7 +57,7 @@ function Login() {
         const passval=passRef.current.value;
 
         let data={
-          mail:mailval,
+          mailid:mailval,
           password:passval,
         }
         fetch(`${serverAPI}/signIn`,{
@@ -69,6 +70,7 @@ function Login() {
             {
                 if(jsondata.result===1){
                     setMailID(mailval);
+                    setFirstMessage(jsondata.message);
                     navigate("/chat");
                 }
                 else

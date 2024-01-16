@@ -8,10 +8,9 @@ const AppContext = React.createContext()
 const AppProvider = ({ children }) => {
   
   const [mailID, setMailID] = useState("");
-
-  const koboldAPI="https://luxury-expense-medal-regular.trycloudflare.com"
-  const serverAPI= "http://df0e-34-122-82-75.ngrok-free.app/"
-  return <AppContext.Provider value={{ serverAPI,koboldAPI,mailID, setMailID }}>
+  const [firstMessage,setFirstMessage]=useState("");
+  const serverAPI= "http://127.0.0.1:5000"
+  return <AppContext.Provider value={{ serverAPI,firstMessage,setFirstMessage, mailID,setMailID }}>
     {children}</AppContext.Provider>
 }
 // eslint-disable-next-line react-refresh/only-export-components
