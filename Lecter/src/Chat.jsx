@@ -12,7 +12,7 @@ function Chat() {
   // TODO
   let responseText=""
 
-  //TODO 
+  //TODO:
   //check for returning user and get appropriate prompt from the login page 
   //create a state in context that will be updated with the user's current eval when they login. 
   let promptString=Prompts.generic+"\n\nThen the roleplay chat between You and Lecter begins.\nDr. Lecter:";
@@ -58,7 +58,7 @@ function Chat() {
       }).then(response => response.json()).then(jsondata => {
         
         let res=jsondata.result
-        //TODO
+        //TODO:
         promptString=Prompts.generic+Prompts[res]+"\n\nThen the roleplay chat between You and Lecter begins.\nDr. Lecter:";
       })
     }
@@ -117,17 +117,32 @@ function Chat() {
         "sampler_order": [ 6, 0, 1, 2, 3, 4, 5 ]
       }
     setUserChatDisabled(true);
-    fetch(`${koboldAPI}/api/v1/generate` ,
-    {
-      method: 'POST',
+    console.log("generate")
+    fetch(`${serverAPI}/generate`,{
+      method:'POST',
       headers:{
-        'accept': 'application/json' ,
-        'Content-Type': 'application/json'
+        'Content-Type':'application/json',
+        "ngrok-skip-browser-warning": "69420"
       },
-      body:JSON.stringify(data)
-    }).then(response => response.json())
-    .then(data => handleResponse(data.results[0].text))
-    .catch(error => console.error(error));
+      body:JSON.stringify({input:input,mailid:mailID})
+    }).then(response => response.json()).then(jsondata => {
+
+      let res=jsondata.result
+      //TODO:
+      promptString=Prompts.generic+Prompts[res]+"\n\nThen the roleplay chat between You and Lecter begins.\nDr. Lecter:";
+    })
+    
+    // fetch(`${koboldAPI}/api/v1/generate` ,
+    // {
+    //   method: 'POST',
+    //   headers:{
+    //     'accept': 'application/json' ,
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body:JSON.stringify(data)
+    // }).then(response => response.json())
+    // .then(data => handleResponse(data.results[0].text))
+    // .catch(error => console.error(error));
   }
 
   // useEffect(() => {
